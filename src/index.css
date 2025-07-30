@@ -1,0 +1,9 @@
+body {
+    background-color: black;
+}
+
+html, body, div {
+    width: 100vw;
+    height: 100vh;
+    margin: 0; 
+  }
