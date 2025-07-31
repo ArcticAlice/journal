@@ -4,7 +4,7 @@ import JournalPage from "./PageTwo";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/journal/">
       <Routes>
         <Route path="/" element={<PageOne />} />
         <Route path="/journal/:year/:month/:day" element={<JournalPage />} />
