@@ -3,10 +3,10 @@ import Calendar from "./Bases/Calendar";
 import Right from "./Assets/Right";
 import Left from "./Assets/Left";
 import Swirl from "./Assets/Swirl"
-import Summary from "./Summary";
+import Summary from "./Bases/Summary";
 
 function PageOne() {
-    const [currentMonth, setCurrentMonth] = useState(6); // July (0-based)
+    const [currentMonth, setCurrentMonth] = useState(7); // July (0-based)
     const [currentYear, setCurrentYear] = useState(2025);
     const [showSummary, setShowSummary] = useState(false);
     const [summaryData, setSummaryData] = useState({});
@@ -91,7 +91,7 @@ function PageOne() {
     return (
         <div style={pageStyle}>
 
-            <Swirl onClick={monthSum} />
+            <Swirl bottom="5%" right="2.5%" onClick={monthSum} />
 
             <div style={arrowContainerStyle}>
                 <Left onClick={handleLeftArrow} />

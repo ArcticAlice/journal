@@ -23,13 +23,13 @@ function Template({ entry, onDelete }) {
         padding: "0",
         margin: "0",
         letterSpacing: "2px",
-        color: "#00B4D8",
+        color: "white",
     };
 
     return (
         <div style={Style}>
             <p style={textStyle}>{entry}</p>
-            <Remove onClick={onDelete} color="#00B4D8" />
+            <Remove onClick={onDelete} color="white" />
         </div>
     );
 }

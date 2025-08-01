@@ -40,8 +40,8 @@ function PopUp({ show, onClose, onSave }) {
 
     const saveButtonStyle = {
         position: "absolute",
-        top: "75%",
-        left: "87%",
+        bottom: "5%",
+        right: "2%",
         backgroundColor: "#A663CC",
         color: "white",
         border: "none",
@@ -61,20 +61,21 @@ function PopUp({ show, onClose, onSave }) {
         border: "none",
         outline: "none",
         backgroundColor: "black",
-        color: "#00B4D8"
+        color: "white"
     };
 
     const tagAreaStyle = {
         resize: "none",
         width: "30%",
-        height: "10%",
+        height: "12%",
         border: "none",
         outline: "none",
         backgroundColor: "black",
         position: "absolute",
-        bottom: "8%",
+        bottom: "10%",
         left: "3%",
-        color: "#00B4D8"
+        color: "white",
+        overflow: "hidden"
     }
 
     return (
