@@ -74,15 +74,22 @@ function PageTwo() {
 
   const dateStyle = {
     position: "absolute",
-    top: "1rem",
-    right: "1rem",
+    top: "2%",
+    right: "0.5%",
     fontSize: "1.5rem",
-    color: "#A663CC",
+    border: "1px solid #A663CC",
+    borderRadius: "12px",
+    color: "white",
+    width: "220px",
+    height: "50px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const container = {
     position: "absolute",
-    top: "50%",
+    top: "52%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     display: "grid",
@@ -101,7 +108,7 @@ function PageTwo() {
       </div>
 
       <div style={addStyle}>
-        <Plus width="55px" height="55px" color="#00B4D8" onClick={() => changePop(true)}/>
+        <Plus width="55px" height="55px" color="white" onClick={() => changePop(true)}/>
       </div>
 
       <div style={container}>

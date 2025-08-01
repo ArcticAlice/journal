@@ -91,7 +91,7 @@ function PageOne() {
     return (
         <div style={pageStyle}>
 
-            <Swirl onClick={monthSum} />
+            <Swirl bottom="5%" right="2.5%" onClick={monthSum} />
 
             <div style={arrowContainerStyle}>
                 <Left onClick={handleLeftArrow} />

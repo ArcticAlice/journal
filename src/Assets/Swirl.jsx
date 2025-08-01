@@ -1,4 +1,4 @@
-function Swirl( {width = "50px", height = "50px", color = "#00B4D8", stroke = "white", strokeWidth = 1, ...props} ) {
+function Swirl( {width = "50px", height = "50px", color = "#750D37", stroke = "white", strokeWidth = 1, ...props} ) {
 
     const style = {
         cursor: "pointer"
@@ -12,7 +12,7 @@ function Swirl( {width = "50px", height = "50px", color = "#00B4D8", stroke = "w
             viewBox="0 -960 960 960"
             fill={color}
             stroke={stroke}
-            strokeWidth={strokeWidth}
+            strokeWidth={strokeWidth}            
             {...props} // Spread additional props, including onClick
         >
             <path d="M240-100q-58 0-99-41t-41-99q0-58 41-99t99-41q58 0 99 41t41 99q0 22-6.5 
