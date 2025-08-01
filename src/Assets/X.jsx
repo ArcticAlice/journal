@@ -1,4 +1,4 @@
-function X({ width = "20px", height = "25px", color = "#750D37", stroke = "white", strokeWidth = 1, ...props }) {
+function X({ width = "20px", height = "25px", color = "#A663CC", stroke = "white", strokeWidth = 1, ...props }) {
 
     const style = {
         position: "absolute",

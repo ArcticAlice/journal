@@ -29,11 +29,20 @@ function Summary({ onClose, summary }) {
     display: "flex",
     flexDirection: "column",
     boxSizing: "border-box",
-    border: "1px solid #750D37",
+    border: "1px solid #A663CC",
   };
 
   const textStyle = {
-    color: "#00B4D8",
+    color: "white",
+    flexGrow: 1,
+    resize: "none",
+    width: "auto",
+    height: "auto",
+    margin: "15px",
+    boxSizing: "border-box",
+    border: "none",
+    outline: "none",
+    backgroundColor: "black",
   };
 
   return (

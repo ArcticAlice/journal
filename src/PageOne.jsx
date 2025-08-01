@@ -6,7 +6,7 @@ import Swirl from "./Assets/Swirl"
 import Summary from "./Summary";
 
 function PageOne() {
-    const [currentMonth, setCurrentMonth] = useState(6); // July (0-based)
+    const [currentMonth, setCurrentMonth] = useState(7); // July (0-based)
     const [currentYear, setCurrentYear] = useState(2025);
     const [showSummary, setShowSummary] = useState(false);
     const [summaryData, setSummaryData] = useState({});
