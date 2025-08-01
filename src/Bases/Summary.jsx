@@ -1,4 +1,4 @@
-import X from "./Assets/X";
+import X from "../Assets/X";
 
 function Summary({ onClose, summary }) {
   let recap = "";
