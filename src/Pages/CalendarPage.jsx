@@ -1,15 +1,16 @@
 import { useState } from "react";
-import Calendar from "./Bases/Calendar";
-import Right from "./Assets/Right";
-import Left from "./Assets/Left";
-import Swirl from "./Assets/Swirl"
-import Summary from "./Bases/Summary";
+import Calendar from "../Bases/Calendar";
+import Right from "../Assets/Right";
+import Left from "../Assets/Left";
+import Swirl from "../Assets/Swirl"
+import Summary from "../Bases/Summary";
 
-function PageOne() {
+function CalendarPage() {
     const [currentMonth, setCurrentMonth] = useState(7); // July (0-based)
     const [currentYear, setCurrentYear] = useState(2025);
     const [showSummary, setShowSummary] = useState(false);
     const [summaryData, setSummaryData] = useState({});
+    
 
     const handleLeftArrow = () => {
         if (currentMonth === 0) {
@@ -107,4 +108,4 @@ function PageOne() {
     );
 }
 
-export default PageOne;
+export default CalendarPage;

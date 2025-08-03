@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import PopUp from "./Bases/PopUp";
-import Template from "./Bases/Template";
-import Plus from "./Assets/Plus";
-import X from "./Assets/X";
+import PopUp from "../Bases/PopUp";
+import Template from "../Bases/Template";
+import Plus from "../Assets/Plus";
+import X from "../Assets/X";
 
-function PageTwo() {
-  const { year, month, day } = useParams();
+function JournalPage() {
+
   const navigate = useNavigate();
+  const { year, month, day } = useParams();
   const [pop, changePop] = useState(false);
+
+  // controls the display of entries
   const [entryList, setEntryList] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+
+  // controls the text field in popUp
+  const [initialTask, setInitialTask] = useState("");
+  const [initialTag, setInitialTag] = useState("");
 
   const dateKey = `${year}-${String(Number(month) + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
@@ -23,25 +31,38 @@ function PageTwo() {
     }
   }, [dateKey]);
 
-  const handleSave = (data) => {
-    
-    const newEntry = {
-      taskName: data.taskName,
-      taskTag: data.taskTag.toUpperCase(),
-    };
+  // Adds new data
+  const handleSave = (newEntry) => {
 
-    const updatedList = [...entryList, newEntry];
-    setEntryList(updatedList);
-
+    // copying data from local database to array
     const allEntries = JSON.parse(localStorage.getItem("entries")) || {};
-    allEntries[dateKey] = updatedList;
+    const dateEntries = allEntries[dateKey] || [];
+
+    if (editingIndex !== null) {
+      // Edit existing entries to array
+      dateEntries[editingIndex] = newEntry;
+    } else {
+      // Add new entries to array
+      dateEntries.push(newEntry);
+    }
+
+    // setting local storage to new array
+    allEntries[dateKey] = dateEntries;
     localStorage.setItem("entries", JSON.stringify(allEntries));
 
+    // Updated display on screen
+    setEntryList(dateEntries);
+
+    // setting everything back to no value
+    setEditingIndex(null);
+    setInitialTag("");
+    setInitialTask("");
     changePop(false);
   };
 
-  const handleDelete = (indexToRemove) => {
-    const updatedList = entryList.filter((_, i) => i !== indexToRemove);
+  // deletes data by index
+  const handleDelete = (index) => {
+    const updatedList = entryList.filter((_, i) => i !== index);
     setEntryList(updatedList);
 
     const allEntries = JSON.parse(localStorage.getItem("entries")) || {};
@@ -49,6 +70,27 @@ function PageTwo() {
     localStorage.setItem("entries", JSON.stringify(allEntries));
   };
 
+  // only opens and configure data in PopUp when editing
+  const handleEdit = (index) => {
+    const allEntries = JSON.parse(localStorage.getItem("entries")) || {};
+    const dateEntries = allEntries[dateKey] || [];
+
+    const selected = dateEntries[index];
+    if (!selected) return;
+
+    setInitialTask(selected.taskName);
+    setInitialTag(selected.taskTag);
+    setEditingIndex(index);
+    changePop(true);
+  };
+
+  // clears old data when user presses x button in PopUp
+  const closePopUp = () => {
+    changePop(false);
+    setEditingIndex(null);
+    setInitialTag("");
+    setInitialTask("");
+  }
 
   const pageStyle = {
     position: "fixed",
@@ -103,12 +145,12 @@ function PageTwo() {
 
       <X width="40px" height="40px" color="#A663CC" onClick={() => navigate("/")} />
 
-      <div style={dateStyle}> 
+      <div style={dateStyle}>
         {new Date(year, month, day).toDateString()}
       </div>
 
       <div style={addStyle}>
-        <Plus width="55px" height="55px" color="white" onClick={() => changePop(true)}/>
+        <Plus width="55px" height="55px" color="white" onClick={() => changePop(true)} />
       </div>
 
       <div style={container}>
@@ -117,14 +159,21 @@ function PageTwo() {
             key={index}
             entry={entry.taskName}
             onDelete={() => handleDelete(index)}
+            onEdit={() => handleEdit(index)}
           />
         ))}
       </div>
 
-      <PopUp show={pop} onClose={() => changePop(false)} onSave={handleSave} />
+      <PopUp
+        show={pop}
+        onClose={closePopUp}
+        onSave={handleSave}
+        initialTask={initialTask}
+        initialTag={initialTag}
+      />
 
     </div>
   );
 }
 
-export default PageTwo;
+export default JournalPage;
