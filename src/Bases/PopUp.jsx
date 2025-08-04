@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import X from "../Assets/X";
 
-
 // show is boolean variable
-function PopUp({ show, onClose, onSave }) {
+function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
 
     const [task, setTask] = useState("");
     const [tag, setTag] = useState("");
+
+    useEffect(() => {
+        if (show) {
+            setTask(initialTask);
+            setTag(initialTag);
+        }
+    }, [show, initialTask, initialTag]);
 
     if (!show) return null;
 
@@ -90,6 +96,7 @@ function PopUp({ show, onClose, onSave }) {
             <textarea
                 style={tagAreaStyle}
                 placeholder="Tag!"
+                value={tag}
                 onChange={(e) => setTag(e.target.value)}
             />
             <button style={saveButtonStyle} onClick={handleSave}>
