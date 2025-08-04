@@ -1,19 +1,6 @@
 import X from "../Assets/X";
 
 function Summary({ onClose, summary }) {
-  let recap = "";
-
-  if (!summary || summary.length === 0) {
-    recap = "No Data Found For This Month.";
-  } else {
-    recap = summary
-      .map(
-        (s) =>
-          `Your consistency for the tag: ${(s.tag).toLowerCase()} was ${s.percent}%. For a total of ${s.count} days.`
-      )
-      .join(" ");
-  }
-
   const style = {
     position: "absolute",
     width: "800px",
@@ -43,12 +30,23 @@ function Summary({ onClose, summary }) {
     border: "none",
     outline: "none",
     backgroundColor: "black",
+    fontWeight: "100"
   };
 
   return (
     <div style={style}>
       <X onClick={onClose} />
-      <p style={textStyle}>{recap}</p>
+      {!summary || summary.length === 0 ? (
+        <p style={textStyle}>No Data Found For This Month.</p>
+      ) : (
+        <ul style={textStyle}>
+          {summary.map((s, index) => (
+            <li key={index}>
+              Your consistency for the tag: {s.tag.toLowerCase()} was {s.percent}%. For a total of {s.count} days.
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
