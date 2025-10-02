@@ -6,7 +6,7 @@ import Swirl from "../Assets/Swirl"
 import Summary from "../Bases/Summary";
 
 function CalendarPage() {
-    const [currentMonth, setCurrentMonth] = useState(8);
+    const [currentMonth, setCurrentMonth] = useState(9);
     const [currentYear, setCurrentYear] = useState(2025);
     const [showSummary, setShowSummary] = useState(false);
     const [summaryData, setSummaryData] = useState({});
