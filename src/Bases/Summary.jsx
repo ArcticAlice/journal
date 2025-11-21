@@ -16,7 +16,7 @@ function Summary({ onClose, summary }) {
     display: "flex",
     flexDirection: "column",
     boxSizing: "border-box",
-    border: "1px solid #A663CC",
+    border: "1px solid #00B4D8",
   };
 
   const textStyle = {
