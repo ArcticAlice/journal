@@ -1,26 +1,35 @@
-import { useNavigate } from "react-router-dom";
 import Block from "./Block";
+import { getData } from "../utils/dataFunctions";
 
-function Calendar({ year, month }) {
-  const navigate = useNavigate();
+function Calendar({ year, month, onSelectDay }) {
 
   const firstDay = new Date(year, month, 1);
   const startWeekday = firstDay.getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const totalSlots = startWeekday + daysInMonth;
   const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
+  const entries = getData();
+  let something = false; // Placeholder for fill logic
 
   const handleDayClick = (day) => {
-    navigate(`/journal/${year}/${month}/${day}`);
+    onSelectDay(day);  // <-- new behavior
   };
 
   const blocks = Array.from({ length: totalSlots }).map((_, index) => {
     const day = index >= startWeekday ? index - startWeekday + 1 : null;
+
+    if(entries[`${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`]) {
+      something = true;
+    } else {
+      something = false;
+    }
+
     return (
       <Block
         key={index}
         day={day}
         onClick={() => day && handleDayClick(day)}
+        fill={something}
       />
     );
   });
@@ -28,17 +37,14 @@ function Calendar({ year, month }) {
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const boxStyle = {
-    width: "70%",
-    height: "75%",
+    width: "100%",
+    height: "100%",
     border: "solid, 1px #00B4D8",
     borderRadius: "10px",
-    left: '50%',
-    transform: 'translateX(-50%)',
     position: "absolute",
-    bottom: "1%",
     display: "flex",
     justifyContent: "center",
-  }
+  };
 
   const weekdayStyle = {
     display: "grid",
@@ -66,18 +72,25 @@ function Calendar({ year, month }) {
     color: "#750D37",
     size: "5%",
     position: "absolute",
-    top: "1%",
-    fontSize: "25px"
-  }
+    width: "100%",
+    height: "7%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "25px",
+    borderBottom: "1px solid #00B4D8",
+  };
 
   return (
     <div style={boxStyle}>
       <p style={textStyle}>{monthName} {year}</p>
+
       <div style={weekdayStyle}>
         {weekdays.map((day, index) => (
           <p key={index}>{day}</p>
         ))}
       </div>
+
       <div style={containerStyle}>
         {blocks}
       </div>

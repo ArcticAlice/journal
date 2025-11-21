@@ -1,96 +1,60 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import PopUp from "../Bases/PopUp";
 import Template from "../Bases/Template";
 import Plus from "../Assets/Plus";
 import X from "../Assets/X";
+import { getData, saveData, deleteData, editData } from "../utils/dataFunctions"; // <-- import
 
-function JournalPage() {
-
-  const navigate = useNavigate();
-  const { year, month, day } = useParams();
+function JournalPage({ year, month, day, onBack }) {
   const [pop, changePop] = useState(false);
-
-  // controls the display of entries
   const [entryList, setEntryList] = useState([]);
-  const [editingIndex, setEditingIndex] = useState(null);
-
-  // controls the text field in popUp
+  const [editingId, setEditingId] = useState(null);
   const [initialTask, setInitialTask] = useState("");
   const [initialTag, setInitialTag] = useState("");
 
   const dateKey = `${year}-${String(Number(month) + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
   useEffect(() => {
-    const saved = localStorage.getItem("entries");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed[dateKey]) {
-        setEntryList(parsed[dateKey]);
-      }
-    }
+    const entries = getData();
+    if (entries[dateKey]) setEntryList(entries[dateKey]);
   }, [dateKey]);
 
-  // Adds new data
   const handleSave = (newEntry) => {
-
-    // copying data from local database to array
-    const allEntries = JSON.parse(localStorage.getItem("entries")) || {};
-    const dateEntries = allEntries[dateKey] || [];
-
-    if (editingIndex !== null) {
-      // Edit existing entries to array
-      dateEntries[editingIndex] = newEntry;
+    if (editingId) {
+      editData(dateKey, editingId, newEntry);
     } else {
-      // Add new entries to array
-      dateEntries.push(newEntry);
+      saveData(dateKey, newEntry);
     }
 
-    // setting local storage to new array
-    allEntries[dateKey] = dateEntries;
-    localStorage.setItem("entries", JSON.stringify(allEntries));
-
-    // Updated display on screen
-    setEntryList(dateEntries);
-
-    // setting everything back to no value
-    setEditingIndex(null);
+    setEntryList(getData()[dateKey] || []);
+    setEditingId(null);
     setInitialTag("");
     setInitialTask("");
     changePop(false);
   };
 
-  // deletes data by index
-  const handleDelete = (index) => {
-    const updatedList = entryList.filter((_, i) => i !== index);
-    setEntryList(updatedList);
-
-    const allEntries = JSON.parse(localStorage.getItem("entries")) || {};
-    allEntries[dateKey] = updatedList;
-    localStorage.setItem("entries", JSON.stringify(allEntries));
+  const handleDelete = (id) => {
+    deleteData(dateKey, id);
+    setEntryList(getData()[dateKey] || []);
   };
 
-  // only opens and configure data in PopUp when editing
-  const handleEdit = (index) => {
-    const allEntries = JSON.parse(localStorage.getItem("entries")) || {};
-    const dateEntries = allEntries[dateKey] || [];
-
-    const selected = dateEntries[index];
+  const handleEdit = (id) => {
+    const entries = getData()[dateKey] || [];
+    const selected = entries.find(e => e.id === id);
     if (!selected) return;
 
     setInitialTask(selected.taskName);
     setInitialTag(selected.taskTag);
-    setEditingIndex(index);
+    setEditingId(id);
     changePop(true);
   };
 
-  // clears old data when user presses x button in PopUp
   const closePopUp = () => {
     changePop(false);
-    setEditingIndex(null);
+    setEditingId(null);
     setInitialTag("");
     setInitialTask("");
-  }
+  };
 
   const pageStyle = {
     position: "fixed",
@@ -142,24 +106,21 @@ function JournalPage() {
 
   return (
     <div style={pageStyle}>
+      <X width="40px" height="40px" color="#A663CC" onClick={onBack} />
 
-      <X width="40px" height="40px" color="#A663CC" onClick={() => navigate("/")} />
-
-      <div style={dateStyle}>
-        {new Date(year, month, day).toDateString()}
-      </div>
+      <div style={dateStyle}>{new Date(year, month, day).toDateString()}</div>
 
       <div style={addStyle}>
         <Plus width="55px" height="55px" color="white" onClick={() => changePop(true)} />
       </div>
 
       <div style={container}>
-        {entryList.map((entry, index) => (
+        {entryList.map((entry) => (
           <Template
-            key={index}
+            key={entry.id}
             entry={entry.taskName}
-            onDelete={() => handleDelete(index)}
-            onEdit={() => handleEdit(index)}
+            onDelete={() => handleDelete(entry.id)}
+            onEdit={() => handleEdit(entry.id)}
           />
         ))}
       </div>
@@ -171,7 +132,6 @@ function JournalPage() {
         initialTask={initialTask}
         initialTag={initialTag}
       />
-
     </div>
   );
 }
