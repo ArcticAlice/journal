@@ -15,7 +15,7 @@ function Number({ day }) {
   return <div style={Style}>{day}</div>;
 }
 
-function Block({ day, onClick, fill = false }) {
+function Block({ day, onClick, fill = false, circle = false }) {
 
   const Style = {
     width: "90%",
@@ -31,8 +31,8 @@ function Block({ day, onClick, fill = false }) {
   };
 
   const fillStyle = {
-    width: "5px",
-    height: "5px",
+    width: "8px",
+    height: "8px",
     border: "1px solid #750D37",
     backgroundColor: fill ? "#750D37" : "transparent",
     borderRadius: "50%",
@@ -44,7 +44,7 @@ function Block({ day, onClick, fill = false }) {
   return (
     <div style={Style} onClick={onClick}>
       {day && <Number day={day} />}
-      <div style={fillStyle}></div>
+      {circle && <div style={fillStyle}></div>}
     </div>
   );
 }

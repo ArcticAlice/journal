@@ -9,7 +9,6 @@ function Calendar({ year, month, onSelectDay }) {
   const totalSlots = startWeekday + daysInMonth;
   const monthName = new Date(year, month).toLocaleString("default", { month: "long" });
   const entries = getData();
-  let something = false; // Placeholder for fill logic
 
   const handleDayClick = (day) => {
     onSelectDay(day);  // <-- new behavior
@@ -18,18 +17,21 @@ function Calendar({ year, month, onSelectDay }) {
   const blocks = Array.from({ length: totalSlots }).map((_, index) => {
     const day = index >= startWeekday ? index - startWeekday + 1 : null;
 
-    if(entries[`${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`]) {
-      something = true;
-    } else {
-      something = false;
+    let fill = false;
+    let circle = false;
+    if (day) {
+      const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      fill = Boolean(entries[key]?.length);
+      circle = true
     }
 
     return (
       <Block
         key={index}
         day={day}
-        onClick={() => day && handleDayClick(day)}
-        fill={something}
+        fill={fill}
+        circle={circle}
+        onClick={() => day && onSelectDay(day)}
       />
     );
   });
