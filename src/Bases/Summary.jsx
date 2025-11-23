@@ -1,6 +1,7 @@
 import X from "../Assets/X";
 
 function Summary({ onClose, summary }) {
+
   const style = {
     position: "absolute",
     width: "800px",
@@ -20,7 +21,7 @@ function Summary({ onClose, summary }) {
   };
 
   const textStyle = {
-    color: "white",
+    color: "#750D37",
     flexGrow: 1,
     resize: "none",
     width: "auto",
@@ -33,20 +34,23 @@ function Summary({ onClose, summary }) {
     fontWeight: "100"
   };
 
+  const summaryData =
+    !summary || summary.length === 0 ? (
+      <p style={textStyle}>No Data Found For This Month.</p>
+    ) : (
+      <ul style={textStyle}>
+        {summary.map((s, index) => (
+          <li key={index}>
+            For a total of {s.count} days you consistently did {s.tag.toLowerCase()} ({s.percent}%).
+          </li>
+        ))}
+      </ul>
+    );
+
   return (
     <div style={style}>
       <X onClick={onClose} />
-      {!summary || summary.length === 0 ? (
-        <p style={textStyle}>No Data Found For This Month.</p>
-      ) : (
-        <ul style={textStyle}>
-          {summary.map((s, index) => (
-            <li key={index}>
-              Your consistency for the tag: {s.tag.toLowerCase()} was {s.percent}%. For a total of {s.count} days.
-            </li>
-          ))}
-        </ul>
-      )}
+      {summaryData}
     </div>
   );
 }

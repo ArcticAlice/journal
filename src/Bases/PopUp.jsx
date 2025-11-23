@@ -41,14 +41,14 @@ function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
-        border: "1px solid #A663CC"
+        border: "1px solid #750D37"
     };
 
     const saveButtonStyle = {
         position: "absolute",
         bottom: "5%",
         right: "2%",
-        backgroundColor: "#A663CC",
+        backgroundColor: "#750D37",
         color: "white",
         border: "none",
         padding: "8px 12px",
@@ -67,7 +67,7 @@ function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
         border: "none",
         outline: "none",
         backgroundColor: "black",
-        color: "white"
+        color: "#00B4D8"
     };
 
     const tagAreaStyle = {
@@ -80,13 +80,13 @@ function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
         position: "absolute",
         bottom: "10%",
         left: "3%",
-        color: "white",
+        color: "#00B4D8",
         overflow: "hidden"
     }
 
     return (
         <div style={popUpStyle}>
-            <X onClick={onClose} color="#A663CC" />
+            <X onClick={onClose} color="#750D37" />
             <textarea
                 style={textareaStyle}
                 placeholder="Enter Task!"

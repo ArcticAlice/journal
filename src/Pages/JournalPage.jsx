@@ -71,7 +71,7 @@ function JournalPage({ year, month, day, onBack }) {
     position: "absolute",
     bottom: "1rem",
     right: "1rem",
-    border: "1px solid #A663CC",
+    border: "1px solid #750D37",
     borderRadius: "12px",
     display: "flex",
     justifyContent: "center",
@@ -83,9 +83,9 @@ function JournalPage({ year, month, day, onBack }) {
     top: "2%",
     right: "0.5%",
     fontSize: "1.5rem",
-    border: "1px solid #A663CC",
+    border: "1px solid #750D37",
     borderRadius: "12px",
-    color: "white",
+    color: "#00B4D8",
     width: "220px",
     height: "50px",
     display: "flex",
@@ -106,12 +106,12 @@ function JournalPage({ year, month, day, onBack }) {
 
   return (
     <div style={pageStyle}>
-      <X width="40px" height="40px" color="#A663CC" onClick={onBack} />
+      <X width="40px" height="40px" color="#750D37" onClick={onBack} />
 
       <div style={dateStyle}>{new Date(year, month, day).toDateString()}</div>
 
       <div style={addStyle}>
-        <Plus width="55px" height="55px" color="white" onClick={() => changePop(true)} />
+        <Plus width="55px" height="55px" color="#00B4D8" onClick={() => changePop(true)} />
       </div>
 
       <div style={container}>
