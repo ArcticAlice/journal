@@ -1,4 +1,4 @@
-function Swirl( {width = "25px", height = "25px", color = "white", stroke = "white", strokeWidth = 1, ...props} ) {
+function Swirl( {width = "25px", height = "25px", color = "#750D37", stroke = "white", strokeWidth = 1, ...props} ) {
 
     const style = {
         cursor: "pointer"

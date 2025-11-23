@@ -1,4 +1,4 @@
-function Remove( {width = "25px", height = "25px", color = "#00B4D8", stroke = "white", strokeWidth = 1, ...props} ) {
+function Remove( {width = "25px", height = "25px", color = "#750D37", stroke = "#750D37", strokeWidth = 1, ...props} ) {
 
     const style = {
         cursor: "pointer"
