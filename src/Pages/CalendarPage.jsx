@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Calendar from "../Bases/Calendar";
 import Right from "../Assets/Right";
 import Left from "../Assets/Left";
-import Swirl from "../Assets/Swirl";
 import Summary from "../Bases/Summary";
 import { getData } from "../utils/dataFunctions";
 
@@ -15,22 +14,44 @@ function CalendarPage({ onSelectDate }) {
     const [summaryData, setSummaryData] = useState({});
 
     const handleLeftArrow = () => {
-        if (currentMonth === 0) {
-            setCurrentMonth(11);
-            setCurrentYear(prevYear => prevYear - 1);
-        } else {
-            setCurrentMonth(prevMonth => prevMonth - 1);
-        }
+        setCurrentMonth(prevMonth => {
+            if (prevMonth === 0) {
+                setCurrentYear(prevYear => prevYear - 1);
+                return 11;
+            }
+            return prevMonth - 1;
+        });
     };
 
     const handleRightArrow = () => {
-        if (currentMonth === 11) {
-            setCurrentMonth(0);
-            setCurrentYear(prevYear => prevYear + 1);
-        } else {
-            setCurrentMonth(prevMonth => prevMonth + 1);
-        }
+        setCurrentMonth(prevMonth => {
+            if (prevMonth === 11) {
+                setCurrentYear(prevYear => prevYear + 1);
+                return 0;
+            }
+            return prevMonth + 1;
+        });
     };
+
+    useEffect(() => {
+        const onKeyDown = (e) => {
+            const el = e.target;
+            const tag = el?.tagName;
+            if (tag === "INPUT" || tag === "TEXTAREA" || el?.isContentEditable) return;
+
+            if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                handleLeftArrow();
+            } else if (e.key === "ArrowRight") {
+                e.preventDefault();
+                handleRightArrow();
+            }
+        };
+
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, []);
+
 
     const handleSelectDay = (day) => {
         onSelectDate(currentYear, currentMonth, day);
@@ -67,53 +88,18 @@ function CalendarPage({ onSelectDate }) {
         setShowSummary(true);
     };
 
-    const pageStyle = {
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "black",
-    };
-
-    const arrowContainerStyle = {
-        position: "absolute",
-        display: "flex",
-        gap: ".5px",
-        right: "2.5%",
-        bottom: "2.5%",
-    };
-
-    const swirlContainerStyle = {
-        position: "absolute",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        left: "2.5%",
-        top: "2.5%",
-    };
-
-    const calendarContainerStyle = {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "70%",
-        height: "85%",
-    };
-
     return (
-        <div style={pageStyle}>
-            <div style={swirlContainerStyle}>
-                <Swirl onClick={monthSum} />
-            </div>
-
-            <div style={calendarContainerStyle}>
+        <div style={styles.page}>
+            <div style={styles.calendarContainer}>
                 <Calendar
                     year={currentYear}
                     month={currentMonth}
                     onSelectDay={handleSelectDay}
+                    openSummary={monthSum}
                 />
             </div>
 
-            <div style={arrowContainerStyle}>
+            <div style={styles.arrowContainer}>
                 <Left onClick={handleLeftArrow} />
                 <Right onClick={handleRightArrow} />
             </div>
@@ -124,3 +110,27 @@ function CalendarPage({ onSelectDate }) {
 }
 
 export default CalendarPage;
+
+
+const styles = {
+    page: {
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "black",
+    },
+    arrowContainer: {
+        position: "absolute",
+        display: "flex",
+        gap: ".5px",
+        right: "3%",
+        bottom: "6%",
+    },
+    calendarContainer: {
+        position: "absolute",
+        top: "50%",
+        left: "5%",
+        transform: "translateY(-50%)",
+        width: "80%",
+        height: "90%",
+    }
+}

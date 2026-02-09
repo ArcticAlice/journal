@@ -2,17 +2,25 @@
 function generateId() {
     return Math.random().toString(36).substring(2, 10);
 }
-
 export function getData() {
     const saved = localStorage.getItem("entries");
-
-    if (!saved) {
-        return {}; // Always return an object
-    }
+    if (!saved) return {};
 
     const entries = JSON.parse(saved);
+
+    // Optional migration: deficulty -> difficulty
+    for (const dateKey of Object.keys(entries)) {
+        entries[dateKey] = (entries[dateKey] || []).map(e => {
+            if (e && e.deficulty !== undefined && e.difficulty === undefined) {
+                return { ...e, difficulty: e.deficulty, deficulty: undefined };
+            }
+            return e;
+        });
+    }
+
     return entries;
 }
+
 
 // Save a new entry with a unique ID
 export function saveData(dateKey, newEntry) {
@@ -21,7 +29,7 @@ export function saveData(dateKey, newEntry) {
 
     const entryWithId = {
         id: generateId(),
-        ...newEntry
+        ...newEntry,
     };
 
     dateEntries.push(entryWithId);

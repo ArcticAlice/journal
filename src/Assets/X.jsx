@@ -1,9 +1,6 @@
 function X({ width = "20px", height = "25px", color = "#00B4D8", stroke = "white", strokeWidth = 1, ...props }) {
 
     const style = {
-        position: "absolute",
-        top: "3%",
-        left: "1%",
         cursor: "pointer"
     }
 
