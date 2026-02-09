@@ -17,7 +17,6 @@ function JournalPage({ year, month, day, onBack }) {
         taskName: "",
         taskTag: "",
         description: "",
-        difficulty: ""
     });
 
     const dateKey = `${year}-${String(Number(month) + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
@@ -38,7 +37,6 @@ function JournalPage({ year, month, day, onBack }) {
             taskName: "",
             taskTag: "",
             description: "",
-            difficulty: ""
         });
     };
 
@@ -49,7 +47,6 @@ function JournalPage({ year, month, day, onBack }) {
             taskName: "",
             taskTag: "",
             description: "",
-            difficulty: ""
         });
     };
 
@@ -82,7 +79,6 @@ function JournalPage({ year, month, day, onBack }) {
             taskName: selected.taskName || "",
             taskTag: selected.taskTag || "",
             description: selected.description || "",
-            difficulty: selected.difficulty || ""
         });
 
         setEditingId(id);

@@ -8,16 +8,6 @@ export function getData() {
 
     const entries = JSON.parse(saved);
 
-    // Optional migration: deficulty -> difficulty
-    for (const dateKey of Object.keys(entries)) {
-        entries[dateKey] = (entries[dateKey] || []).map(e => {
-            if (e && e.deficulty !== undefined && e.difficulty === undefined) {
-                return { ...e, difficulty: e.deficulty, deficulty: undefined };
-            }
-            return e;
-        });
-    }
-
     return entries;
 }
 

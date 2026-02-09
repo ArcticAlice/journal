@@ -1,11 +1,10 @@
 import X from "../Assets/X";
 import { useEffect, useState } from "react";
 
-function Detail({ show, info, onClose, onSave, date }) {
+function Detail({ show, info, onClose, onSave }) {
     const [task, setTask] = useState("");
     const [tag, setTag] = useState("");
     const [description, setDescription] = useState("");
-    const [difficulty, setDifficulty] = useState("");
 
     useEffect(() => {
         if (!show) return;
@@ -13,7 +12,6 @@ function Detail({ show, info, onClose, onSave, date }) {
         setTask(info?.taskName || "");
         setTag(info?.taskTag || "");
         setDescription(info?.description || "");
-        setDifficulty(info?.difficulty || "");
     }, [show, info]);
 
     const handleSave = () => {
@@ -26,7 +24,6 @@ function Detail({ show, info, onClose, onSave, date }) {
             taskName: task,
             taskTag: tag.toUpperCase(),
             description: description,
-            difficulty: difficulty
         });
 
         onClose();
@@ -46,44 +43,24 @@ function Detail({ show, info, onClose, onSave, date }) {
 
             {/* Middle */}
             <div style={styles.middle}>
-                {/* Left (75%) */}
-                <div style={styles.leftSection}>
-                    <p style={styles.taskName}>{task || "Task"}</p>
+                <p style={styles.taskName}>{task}</p>
 
-                    <textarea
-                        style={styles.descriptionInput}
-                        placeholder="Add description..."
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                </div>
-
-                {/* Right (25%) */}
-                <div style={styles.rightSection}>
-
-                    <textarea
-                        style={styles.tag}
-                        placeholder="Tag!"
-                        value={tag}
-                        onChange={(e) => setTag(e.target.value)}
-                    />
-
-                    <div style={styles.difficultyBox}>
-                        <textarea
-                            style={styles.difficultyText}
-                            placeholder="Difficulty (1-5)"
-                            value={difficulty}
-                            onChange={(e) => setDifficulty(e.target.value)}
-                        />
-                    </div>
-                </div>
+                <textarea
+                    style={styles.descriptionInput}
+                    placeholder="Add description..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
             </div>
 
             {/* Footer */}
             <div style={styles.bottom}>
-                <button style={styles.date}>
-                    {date}
-                </button>
+                <textarea
+                    style={styles.tag}
+                    placeholder="Tag!"
+                    value={tag}
+                    onChange={(e) => setTag(e.target.value)}
+                />
                 <button style={styles.saveButton} onClick={handleSave}>
                     Save
                 </button>
@@ -141,21 +118,9 @@ const styles = {
     // ===== Middle (90%) =====
     middle: {
         flex: "8",
-        display: "flex",
-        flexDirection: "row",
+        postion: "relative",
         boxSizing: "border-box",
         overflow: "hidden",
-    },
-
-    leftSection: {
-        flex: "8",
-        borderRight: "2px solid #750D37",
-        boxSizing: "border-box",
-        padding: "20px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        gap: "15px",
     },
 
     taskName: {
@@ -163,6 +128,9 @@ const styles = {
         fontSize: "28px",
         fontWeight: "400",
         outline: "none",
+        position: "absolute",
+        top: "12%",
+        left: "3%",
     },
 
     descriptionInput: {
@@ -173,55 +141,13 @@ const styles = {
         fontSize: "14px",
         padding: "12px",
         outline: "none",
-        width: "100%",
-        height: "340px",
+        width: "90%",
+        height: "60%",
         resize: "none",
-        fontFamily: "inherit",
         boxSizing: "border-box",
-    },
-
-    // ===== Right (25%) =====
-    rightSection: {
-        flex: "2",
-        boxSizing: "border-box",
-        position: "relative",
-    },
-    tag: {
-        resize: "none",
-        background: "transparent",
-        border: "none",
-        outline: "none",
-        fontSize: "14px",
         position: "absolute",
-        left: "50%",
-        top: "25%",
-        transform: "translateX(-50%)",
-        width: "100%",
-        color: "#00B4D8",
-        textAlign: "center",
-    },
-    difficultyBox: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        position: "absolute",
-        top: "75%",
-        left: "50%",
-        transform: "translateX(-50%)",
-        boxSizing: "border-box",
-        width: "100%",
-        height: "25%",
-    },
-    difficultyText: {
-        resize: "none",
-        background: "transparent",
-        border: "none",
-        outline: "none",
-        borderRadius: "5px",
-        color: "#00B4D8",
-        boxSizing: "border-box",
-        flex: "4",
-        textAlign: "center",
+        top: "23%",
+        left: "3%",
     },
 
     // ===== Footer (5%) =====
@@ -233,14 +159,16 @@ const styles = {
         boxSizing: "border-box",
         postion: "relative",
     },
-    date: {
-        backgroundColor: "#00B4D8",
-        color: "white",
+    tag: {
+        resize: "none",
+        background: "transparent",
         border: "none",
-        padding: "10px 18px",
-        borderRadius: "6px",
+        outline: "none",
+        fontSize: "14px",
         position: "absolute",
         left: "3%",
+        color: "#00B4D8",
+        paddingTop: "20px",
     },
     saveButton: {
         backgroundColor: "#00B4D8",
