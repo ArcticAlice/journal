@@ -3,6 +3,7 @@ import Calendar from "../Bases/Calendar";
 import Right from "../Assets/Right";
 import Left from "../Assets/Left";
 import Summary from "../Bases/Summary";
+import Swirl from "../Assets/Swirl";
 import { getData } from "../utils/dataFunctions";
 
 function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
@@ -79,6 +80,9 @@ function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
 
     return (
         <div style={styles.page}>
+            <div style={styles.swirlContainer}>
+                <Swirl onClick={monthSum} />
+            </div>
             <div style={styles.calendarContainer}>
                 <Calendar
                     year={currentYear}
@@ -117,9 +121,17 @@ const styles = {
     calendarContainer: {
         position: "absolute",
         top: "50%",
-        left: "5%",
-        transform: "translateY(-50%)",
-        width: "80%",
-        height: "90%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "70%",
+        height: "85%",
+    },
+    swirlContainer: {
+        position: "absolute",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        left: "2.5%",
+        top: "2.5%",
     }
 }

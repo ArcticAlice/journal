@@ -82,17 +82,17 @@ const styles = {
         transform: "translate(-50%, -50%)",
         zIndex: 100,
         overflow: "hidden",
-        borderRadius: "15px",
+        borderRadius: "10px",
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
-        border: "2px solid #750D37",
+        border: "1px solid #750D37",
     },
 
     // ===== Header (5%) =====
     top: {
         flex: "0.9",
-        borderBottom: "2px solid #750D37",
+        borderBottom: "1px solid #750D37",
         position: "relative",
         display: "flex",
         alignItems: "center",
@@ -135,8 +135,8 @@ const styles = {
 
     descriptionInput: {
         background: "transparent",
-        border: "2px solid #750D37",
-        borderRadius: "15px",
+        border: "1px solid #750D37",
+        borderRadius: "10px",
         color: "#00B4D8",
         fontSize: "14px",
         padding: "12px",
@@ -153,7 +153,7 @@ const styles = {
     // ===== Footer (5%) =====
     bottom: {
         flex: "1.1",
-        borderTop: "2px solid #750D37",
+        borderTop: "1px solid #750D37",
         display: "flex",
         alignItems: "center",
         boxSizing: "border-box",

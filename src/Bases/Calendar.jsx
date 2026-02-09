@@ -1,5 +1,4 @@
 import Block from "./Block";
-import Swirl from "../Assets/Swirl";
 import { getData } from "../utils/dataFunctions";
 
 function Calendar({ year, month, onSelectDay, openSummary }) {
@@ -39,9 +38,6 @@ function Calendar({ year, month, onSelectDay, openSummary }) {
 
             <div style={styles.yearBox}>   
                 <p style={styles.text}>{monthName} {year}</p>
-                <div style={styles.swirlBox}>
-                    <Swirl onClick={openSummary} />
-                </div>
             </div>
 
             <div style={styles.weekday}>
@@ -72,48 +68,40 @@ const styles = {
     weekday: {
         display: "grid",
         gridTemplateColumns: "repeat(7, 1fr)",
-        width: "85%",
+        width: "90%",
         height: "20%",
         color: "#00B4D8",
         textAlign: "center",
         position: "absolute",
-        top: "13%",
-        left: "50%",
+        top: "11%",
+        left: "51%",
         transform: 'translateX(-50%)',
     },
     container: {
-        width: "85%",
+        width: "90%",
         height: "80%",
         position: "absolute",
         bottom: "2%",
         display: "grid",
         gridTemplateColumns: "repeat(7, 1fr)",
+        columnGap: "5px"
     },
+    
     text: {
         color: "#750D37",
         position: "absolute",
         fontSize: "25px",
-        top: "50%",
-        transform: "translateY(-50%)",
-        left: "5%",
         display: "inline-block",
-    },
-    swirlBox: {
-        position: "absolute",
-        right: "5%",
-        top: "50%",
-        transform: "translateY(-50%)",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
     },
 
     yearBox: {
         position: "relative",
         width: "100%",
-        height: "10%",
+        height: "7%",
         borderBottom: "1px solid #00B4D8",
         boxSizing: "border-box",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
     }
 }
