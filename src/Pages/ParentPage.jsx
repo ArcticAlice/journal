@@ -3,14 +3,18 @@ import CalendarPage from "./CalendarPage";
 import JournalPage from "./JournalPage";
 
 function ParentPage() {
-
     const [selectedDate, setSelectedDate] = useState({
         year: null,
         month: null,
         day: null,
     });
 
-    const [view, setView] = useState("calendar"); 
+    // Persist the currently viewed calendar month even when CalendarPage unmounts
+    const now = new Date();
+    const initialMonthIndex = (now.getFullYear() - 1970) * 12 + now.getMonth();
+    const [monthIndex, setMonthIndex] = useState(initialMonthIndex);
+
+    const [view, setView] = useState("calendar");
     // "calendar" or "journal"
 
     const handleSelectDate = (year, month, day) => {
@@ -27,6 +31,8 @@ function ParentPage() {
             {view === "calendar" && (
                 <CalendarPage
                     onSelectDate={handleSelectDate}
+                    monthIndex={monthIndex}
+                    setMonthIndex={setMonthIndex}
                 />
             )}
 

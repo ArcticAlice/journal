@@ -3,137 +3,172 @@ import PopUp from "../Bases/PopUp";
 import Template from "../Bases/Template";
 import Plus from "../Assets/Plus";
 import X from "../Assets/X";
-import { getData, saveData, deleteData, editData } from "../utils/dataFunctions"; // <-- import
+import Detail from "../Bases/Detail";
+import { getData, saveData, deleteData, editData } from "../utils/dataFunctions";
 
 function JournalPage({ year, month, day, onBack }) {
-  const [pop, changePop] = useState(false);
-  const [entryList, setEntryList] = useState([]);
-  const [editingId, setEditingId] = useState(null);
-  const [initialTask, setInitialTask] = useState("");
-  const [initialTag, setInitialTag] = useState("");
+    const [pop, changePop] = useState(false);
+    const [detailPop, changeDetailPop] = useState(false);
+    const [entryList, setEntryList] = useState([]);
+    const [editingId, setEditingId] = useState(null);
 
-  const dateKey = `${year}-${String(Number(month) + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    // keep the same field names you store in localStorage
+    const [initialInfo, setInitialInfo] = useState({
+        taskName: "",
+        taskTag: "",
+        description: "",
+    });
 
-  useEffect(() => {
-    const entries = getData();
-    if (entries[dateKey]) setEntryList(entries[dateKey]);
-  }, [dateKey]);
+    const dateKey = `${year}-${String(Number(month) + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-  const handleSave = (newEntry) => {
-    if (editingId) {
-      editData(dateKey, editingId, newEntry);
-    } else {
-      saveData(dateKey, newEntry);
-    }
+    useEffect(() => {
+        const entries = getData();
+        setEntryList(entries[dateKey] || []);
+    }, [dateKey]);
 
-    setEntryList(getData()[dateKey] || []);
-    setEditingId(null);
-    setInitialTag("");
-    setInitialTask("");
-    changePop(false);
-  };
+    const refreshList = () => {
+        setEntryList(getData()[dateKey] || []);
+    };
 
-  const handleDelete = (id) => {
-    deleteData(dateKey, id);
-    setEntryList(getData()[dateKey] || []);
-  };
+    const closePopUp = () => {
+        changePop(false);
+        setEditingId(null);
+        setInitialInfo({
+            taskName: "",
+            taskTag: "",
+            description: "",
+        });
+    };
 
-  const handleEdit = (id) => {
-    const entries = getData()[dateKey] || [];
-    const selected = entries.find(e => e.id === id);
-    if (!selected) return;
+    const closeDetailPopUp = () => {
+        changeDetailPop(false);
+        setEditingId(null);
+        setInitialInfo({
+            taskName: "",
+            taskTag: "",
+            description: "",
+        });
+    };
 
-    setInitialTask(selected.taskName);
-    setInitialTag(selected.taskTag);
-    setEditingId(id);
-    changePop(true);
-  };
+    // handles "add new" from small popup
+    const handleCreate = (newEntry) => {
+        saveData(dateKey, newEntry);
+        refreshList();
+        closePopUp();
+    };
 
-  const closePopUp = () => {
-    changePop(false);
-    setEditingId(null);
-    setInitialTag("");
-    setInitialTask("");
-  };
+    // handles "save edit" from Detail popup
+    const handleUpdate = (updatedEntry) => {
+        if (!editingId) return;
+        editData(dateKey, editingId, updatedEntry);
+        refreshList();
+        closeDetailPopUp();
+    };
 
-  const pageStyle = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "#0A0A0A",
-    padding: "2rem",
-    boxSizing: "border-box",
-  };
+    const handleDelete = (id) => {
+        deleteData(dateKey, id);
+        refreshList();
+    };
 
-  const addStyle = {
-    position: "absolute",
-    bottom: "1rem",
-    right: "1rem",
-    border: "1px solid #750D37",
-    borderRadius: "12px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  };
+    const handleEdit = (id) => {
+        const entries = getData()[dateKey] || [];
+        const selected = entries.find(e => e.id === id);
+        if (!selected) return;
 
-  const dateStyle = {
-    position: "absolute",
-    top: "2%",
-    right: "0.5%",
-    fontSize: "1.5rem",
-    border: "1px solid #750D37",
-    borderRadius: "12px",
-    color: "#00B4D8",
-    width: "220px",
-    height: "50px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
+        setInitialInfo({
+            taskName: selected.taskName || "",
+            taskTag: selected.taskTag || "",
+            description: selected.description || "",
+        });
 
-  const container = {
-    position: "absolute",
-    top: "52%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr",
-    width: "85%",
-    height: "80%",
-  };
+        setEditingId(id);
+        changeDetailPop(true);
+    };
 
-  return (
-    <div style={pageStyle}>
-      <X width="40px" height="40px" color="#750D37" onClick={onBack} />
+    return (
+        <div style={styles.page}>
+            <X width="40px" height="40px" color="#750D37" onClick={onBack} />
 
-      <div style={dateStyle}>{new Date(year, month, day).toDateString()}</div>
+            <div style={styles.date}>{new Date(year, month, day).toDateString()}</div>
 
-      <div style={addStyle}>
-        <Plus width="55px" height="55px" color="#00B4D8" onClick={() => changePop(true)} />
-      </div>
+            <div style={styles.add}>
+                <Plus width="55px" height="55px" color="#00B4D8" onClick={() => changePop(true)} />
+            </div>
 
-      <div style={container}>
-        {entryList.map((entry) => (
-          <Template
-            key={entry.id}
-            entry={entry.taskName}
-            onDelete={() => handleDelete(entry.id)}
-            onEdit={() => handleEdit(entry.id)}
-          />
-        ))}
-      </div>
+            <div style={styles.container}>
+                {entryList.map((entry) => (
+                    <Template
+                        key={entry.id}
+                        entry={entry.taskName}
+                        onDelete={() => handleDelete(entry.id)}
+                        onEdit={() => handleEdit(entry.id)}
+                    />
+                ))}
+            </div>
 
-      <PopUp
-        show={pop}
-        onClose={closePopUp}
-        onSave={handleSave}
-        initialTask={initialTask}
-        initialTag={initialTag}
-      />
-    </div>
-  );
+            <PopUp
+                show={pop}
+                onClose={closePopUp}
+                onSave={handleCreate}
+            />
+
+            <Detail
+                show={detailPop}
+                info={initialInfo}
+                onClose={closeDetailPopUp}
+                onSave={handleUpdate}
+                date={dateKey}
+            />
+        </div>
+    );
 }
 
 export default JournalPage;
+
+
+const styles = {
+    page: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "#0A0A0A",
+        padding: "2rem",
+        boxSizing: "border-box",
+    },
+    add: {
+        position: "absolute",
+        bottom: "1rem",
+        right: "1rem",
+        border: "1px solid #750D37",
+        borderRadius: "12px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    date: {
+        position: "absolute",
+        top: "2%",
+        right: "0.5%",
+        fontSize: "1.5rem",
+        border: "1px solid #750D37",
+        borderRadius: "12px",
+        color: "#00B4D8",
+        width: "220px",
+        height: "50px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    container: {
+        position: "absolute",
+        top: "52%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr 1fr",
+        width: "85%",
+        height: "80%",
+    }
+}

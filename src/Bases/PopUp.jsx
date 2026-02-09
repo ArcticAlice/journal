@@ -1,35 +1,68 @@
 import React, { useState, useEffect } from "react";
 import X from "../Assets/X";
 
-// show is boolean variable
-function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
-
+function PopUp({ show, onClose, onSave }) {
     const [task, setTask] = useState("");
     const [tag, setTag] = useState("");
 
     useEffect(() => {
         if (show) {
-            setTask(initialTask);
-            setTag(initialTag);
+            setTask("");
+            setTag("");
         }
-    }, [show, initialTask, initialTag]);
-
-    if (!show) return null;
+    }, [show]);
 
     const handleSave = () => {
         if (task.trim() === "") {
             alert("Task name cannot be empty!");
             return;
         }
-        onSave({ taskName: task, taskTag: tag.toUpperCase() });
-        setTask("");
+
+        onSave({
+            taskName: task,
+            taskTag: tag.toUpperCase(),
+            description: "",
+            difficulty: ""
+        });
+
         onClose();
     };
 
-    const popUpStyle = {
-        position: "absolute",
+    if (!show) return null;
+
+    return (
+        <div style={styles.popUp}>
+            <div style={styles.xBox}>
+                <X onClick={onClose} color="#750D37" />
+            </div>
+            <textarea
+                style={styles.textArea}
+                placeholder="Enter Task!"
+                value={task}
+                onChange={(e) => setTask(e.target.value)}
+            />
+            <textarea
+                style={styles.tagArea}
+                placeholder="Tag!"
+                value={tag}
+                onChange={(e) => setTag(e.target.value)}
+            />
+            <button style={styles.saveButton} onClick={handleSave}>
+                Save
+            </button>
+        </div>
+    );
+}
+
+export default PopUp;
+
+
+const styles = {
+    
+    popUp: {
+        position: "relative",
         width: "500px",
-        height: "150px",
+        height: "250px",
         backgroundColor: "black",
         padding: "20px",
         top: "50%",
@@ -42,9 +75,9 @@ function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
         flexDirection: "column",
         boxSizing: "border-box",
         border: "1px solid #750D37"
-    };
+    },
 
-    const saveButtonStyle = {
+    saveButton: {
         position: "absolute",
         bottom: "5%",
         right: "2%",
@@ -54,23 +87,30 @@ function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
         padding: "8px 12px",
         borderRadius: "4px",
         cursor: "pointer"
-    };
+    },
 
-    const textareaStyle = {
+    xBox: {
+        position: "absolute",
+        top: "5%",
+        right: "3%",
+        cursor: "pointer"
+    },
+
+    textArea: {
         flexGrow: 1,
         resize: "none",
         width: "100%",
         height: "auto",
-        marginTop: "10px",
         marginBottom: "40px",
+        marginTop: "20px",
         boxSizing: "border-box",
         border: "none",
         outline: "none",
-        backgroundColor: "black",
+        backgroundColor: "transparent",
         color: "#00B4D8"
-    };
+    },
 
-    const tagAreaStyle = {
+    tagArea: {
         resize: "none",
         width: "30%",
         height: "12%",
@@ -78,32 +118,9 @@ function PopUp({ show, onClose, onSave, initialTask = "", initialTag = "" }) {
         outline: "none",
         backgroundColor: "black",
         position: "absolute",
-        bottom: "10%",
-        left: "3%",
+        bottom: "5%",
+        left: "5%",
         color: "#00B4D8",
         overflow: "hidden"
     }
-
-    return (
-        <div style={popUpStyle}>
-            <X onClick={onClose} color="#750D37" />
-            <textarea
-                style={textareaStyle}
-                placeholder="Enter Task!"
-                value={task}
-                onChange={(e) => setTask(e.target.value)}
-            />
-            <textarea
-                style={tagAreaStyle}
-                placeholder="Tag!"
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-            />
-            <button style={saveButtonStyle} onClick={handleSave}>
-                Save
-            </button>
-        </div>
-    );
-}
-
-export default PopUp;
+};
