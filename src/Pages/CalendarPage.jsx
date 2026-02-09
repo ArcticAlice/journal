@@ -1,36 +1,26 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Calendar from "../Bases/Calendar";
 import Right from "../Assets/Right";
 import Left from "../Assets/Left";
 import Summary from "../Bases/Summary";
 import { getData } from "../utils/dataFunctions";
 
-function CalendarPage({ onSelectDate }) {
-    const month = new Date().getMonth();
-    const year = new Date().getFullYear();
-    const [currentMonth, setCurrentMonth] = useState(month);
-    const [currentYear, setCurrentYear] = useState(year);
+function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
+    const { currentYear, currentMonth } = useMemo(() => {
+        const year = 1970 + Math.floor(monthIndex / 12);
+        const month = ((monthIndex % 12) + 12) % 12; // keep in 0..11 even if monthIndex goes negative
+        return { currentYear: year, currentMonth: month };
+    }, [monthIndex]);
+
     const [showSummary, setShowSummary] = useState(false);
     const [summaryData, setSummaryData] = useState({});
 
     const handleLeftArrow = () => {
-        setCurrentMonth(prevMonth => {
-            if (prevMonth === 0) {
-                setCurrentYear(prevYear => prevYear - 1);
-                return 11;
-            }
-            return prevMonth - 1;
-        });
+        setMonthIndex(prev => prev - 1);
     };
 
     const handleRightArrow = () => {
-        setCurrentMonth(prevMonth => {
-            if (prevMonth === 11) {
-                setCurrentYear(prevYear => prevYear + 1);
-                return 0;
-            }
-            return prevMonth + 1;
-        });
+        setMonthIndex(prev => prev + 1);
     };
 
     useEffect(() => {
@@ -52,13 +42,12 @@ function CalendarPage({ onSelectDate }) {
         return () => window.removeEventListener("keydown", onKeyDown);
     }, []);
 
-
     const handleSelectDay = (day) => {
         onSelectDate(currentYear, currentMonth, day);
     };
 
     const monthSum = () => {
-        const entries = getData(); // <-- use function
+        const entries = getData();
         const results = [];
 
         const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();

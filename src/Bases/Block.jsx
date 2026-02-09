@@ -31,10 +31,10 @@ function Block({ day, onClick, fill = false, circle = false }) {
     };
 
     const fillStyle = {
-        width: "8px",
-        height: "8px",
-        border: "1px solid #750D37",
-        backgroundColor: fill ? "#750D37" : "transparent",
+        width: "6px",
+        height: "6px",
+        border: "1px solid #ffd700",
+        backgroundColor: fill ? "#ffd700" : "transparent",
         borderRadius: "50%",
         position: "absolute",
         top: "5%",
