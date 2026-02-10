@@ -56,3 +56,7 @@ export function editData(dateKey, id, newEntry) {
     allEntries[dateKey] = updatedList;
     localStorage.setItem("entries", JSON.stringify(allEntries));
 }
+
+export function capitalizeWords(str) {
+  return str.replace(/\b\p{L}/gu, c => c.toUpperCase());
+}

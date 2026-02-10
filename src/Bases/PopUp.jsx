@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import X from "../Assets/X";
+import {capitalizeWords} from "../utils/dataFunctions";
 
 function PopUp({ show, onClose, onSave }) {
     const [task, setTask] = useState("");
@@ -19,7 +20,7 @@ function PopUp({ show, onClose, onSave }) {
         }
 
         onSave({
-            taskName: task,
+            taskName: capitalizeWords(task),
             taskTag: tag.toUpperCase(),
             description: "",
             difficulty: ""
