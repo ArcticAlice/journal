@@ -1,5 +1,6 @@
 import X from "../Assets/X";
 import { useEffect, useState } from "react";
+import {capitalizeWords} from "../utils/dataFunctions";
 
 function Detail({ show, info, onClose, onSave }) {
     const [task, setTask] = useState("");
@@ -21,7 +22,7 @@ function Detail({ show, info, onClose, onSave }) {
         }
 
         onSave({
-            taskName: task,
+            taskName: capitalizeWords(task),
             taskTag: tag.toUpperCase(),
             description: description,
         });
@@ -43,7 +44,12 @@ function Detail({ show, info, onClose, onSave }) {
 
             {/* Middle */}
             <div style={styles.middle}>
-                <p style={styles.taskName}>{task}</p>
+                <textarea
+                    style={styles.taskName}
+                    placeholder="Add task..."
+                    value={task}
+                    onChange={(e) => setTask(e.target.value)}
+                />
 
                 <textarea
                     style={styles.descriptionInput}
@@ -127,10 +133,13 @@ const styles = {
         color: "#00B4D8",
         fontSize: "28px",
         fontWeight: "400",
-        outline: "none",
         position: "absolute",
         top: "12%",
         left: "3%",
+        resize: "none",
+        background: "transparent",
+        border: "none",
+        outline: "none",
     },
 
     descriptionInput: {
