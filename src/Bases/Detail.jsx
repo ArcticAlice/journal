@@ -1,6 +1,6 @@
 import X from "../Assets/X";
 import { useEffect, useState } from "react";
-import {capitalizeWords} from "../utils/dataFunctions";
+import { capitalizeWords } from "../utils/dataFunctions";
 
 function Detail({ show, info, onClose, onSave }) {
     const [task, setTask] = useState("");
@@ -37,7 +37,7 @@ function Detail({ show, info, onClose, onSave }) {
             {/* Header */}
             <div style={styles.top}>
                 <div style={styles.closeWrap}>
-                    <X onClick={onClose} />
+                    <X onClick={onClose}/>
                 </div>
                 <h2 style={styles.headerTitle}>Task Details</h2>
             </div>
@@ -88,23 +88,25 @@ const styles = {
         transform: "translate(-50%, -50%)",
         zIndex: 100,
         overflow: "hidden",
-        borderRadius: "10px",
         display: "flex",
         flexDirection: "column",
         boxSizing: "border-box",
-        border: "1px solid #750D37",
+        borderRadius: "5px",
+        borderBottom: "1px solid #6D1942",
     },
 
     // ===== Header (5%) =====
     top: {
         flex: "0.9",
-        borderBottom: "1px solid #750D37",
         position: "relative",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
         boxSizing: "border-box",
+        background: "linear-gradient(90deg,rgba(117, 13, 55, 1) 0%, rgba(0, 180, 216, 1) 100%)",
+        borderTopLeftRadius: "5px",
+        borderTopRightRadius: "5px",
     },
     closeWrap: {
         position: "absolute",
@@ -115,7 +117,7 @@ const styles = {
         alignItems: "center",
     },
     headerTitle: {
-        color: "#00B4D8",
+        color: "white",
         fontSize: "16px",
         fontWeight: "500",
         margin: 0,
@@ -123,30 +125,35 @@ const styles = {
 
     // ===== Middle (90%) =====
     middle: {
-        flex: "8",
+        flex: "7.8",
         postion: "relative",
         boxSizing: "border-box",
         overflow: "hidden",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        borderRight: "1px solid #6D1942",
+        borderLeft: "1px solid #6D1942",
     },
 
     taskName: {
-        color: "#00B4D8",
+        color: "white",
         fontSize: "28px",
         fontWeight: "400",
         position: "absolute",
-        top: "12%",
-        left: "3%",
         resize: "none",
         background: "transparent",
         border: "none",
         outline: "none",
+        paddingTop: "25px",
+        width: "90%",
     },
 
     descriptionInput: {
         background: "transparent",
-        border: "1px solid #750D37",
+        border: "none",
         borderRadius: "10px",
-        color: "#00B4D8",
+        color: "white",
         fontSize: "14px",
         padding: "12px",
         outline: "none",
@@ -156,17 +163,19 @@ const styles = {
         boxSizing: "border-box",
         position: "absolute",
         top: "23%",
-        left: "3%",
+        lineHeight: "1.5",
     },
 
     // ===== Footer (5%) =====
     bottom: {
-        flex: "1.1",
-        borderTop: "1px solid #750D37",
+        flex: "1.2",
         display: "flex",
         alignItems: "center",
         boxSizing: "border-box",
         postion: "relative",
+        borderRight: "1px solid #6D1942",
+        borderLeft: "1px solid #6D1942",
+        borderRadius: "5px",
     },
     tag: {
         resize: "none",
@@ -176,7 +185,7 @@ const styles = {
         fontSize: "14px",
         position: "absolute",
         left: "3%",
-        color: "#00B4D8",
+        color: "white",
         paddingTop: "20px",
     },
     saveButton: {

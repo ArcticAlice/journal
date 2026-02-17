@@ -33,7 +33,6 @@ function Block({ day, onClick, fill = false, circle = false }) {
         marginTop: "1px",
         marginBottom: "1px",
         backgroundColor: "rgba(117, 13, 55, 0.12)",
-
         transition: "transform 140ms ease, box-shadow 140ms ease",
 
         // slight expand on hover

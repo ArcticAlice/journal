@@ -108,7 +108,8 @@ const styles = {
         border: "none",
         outline: "none",
         backgroundColor: "transparent",
-        color: "#00B4D8"
+        color: "#00B4D8",
+        lineHeight: "1.5",
     },
 
     tagArea: {

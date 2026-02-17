@@ -59,11 +59,12 @@ const styles = {
     box: {
         width: "100%",
         height: "100%",
-        border: "solid, 1px #00B4D8",
         borderRadius: "10px",
         position: "absolute",
         display: "flex",
         justifyContent: "center",
+        border: "solid, 1px #00B4D8",
+        
     },
     weekday: {
         display: "grid",
@@ -86,22 +87,22 @@ const styles = {
         gridTemplateColumns: "repeat(7, 1fr)",
         columnGap: "5px"
     },
-    
     text: {
-        color: "#750D37",
+        color: "white",
         position: "absolute",
         fontSize: "25px",
         display: "inline-block",
     },
-
     yearBox: {
         position: "relative",
         width: "100%",
         height: "7%",
-        borderBottom: "1px solid #00B4D8",
+        borderTopRightRadius: "10px",
+        borderTopLeftRadius: "10px",
         boxSizing: "border-box",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        background: "linear-gradient(90deg,rgba(117, 13, 55, 1) 0%, rgba(0, 180, 216, 1) 100%)",
     }
 }
