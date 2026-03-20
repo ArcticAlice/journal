@@ -6,9 +6,11 @@ export function getData() {
     const saved = localStorage.getItem("entries");
     if (!saved) return {};
 
-    const entries = JSON.parse(saved);
-
-    return entries;
+    try {
+        return JSON.parse(saved);
+    } catch {
+        return {};
+    }
 }
 
 

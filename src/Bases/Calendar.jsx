@@ -60,7 +60,7 @@ const styles = {
         width: "100%",
         height: "100%",
         borderRadius: "10px",
-        position: "absolute",
+        position: "relative",
         display: "flex",
         justifyContent: "center",
         border: "solid, 1px #00B4D8",
@@ -94,7 +94,7 @@ const styles = {
         display: "inline-block",
     },
     yearBox: {
-        position: "relative",
+        position: "absolute",
         width: "100%",
         height: "7%",
         borderTopRightRadius: "10px",

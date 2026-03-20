@@ -1,10 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import Calendar from "../Bases/Calendar";
 import Right from "../Assets/Right";
 import Left from "../Assets/Left";
 import Summary from "../Bases/Summary";
 import Swirl from "../Assets/Swirl";
 import { getData } from "../utils/dataFunctions";
+
+const calendarVariants = {
+    enter: (dir) => ({ opacity: 0, x: dir * 22 }),
+    center: { opacity: 1, x: 0 },
+    exit:   (dir) => ({ opacity: 0, x: dir * -22 }),
+};
 
 function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
     const { currentYear, currentMonth } = useMemo(() => {
@@ -14,13 +21,16 @@ function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
     }, [monthIndex]);
 
     const [showSummary, setShowSummary] = useState(false);
-    const [summaryData, setSummaryData] = useState({});
+    const [summaryData, setSummaryData] = useState([]);
+    const [direction, setDirection] = useState(0);
 
     const handleLeftArrow = () => {
+        setDirection(-1);
         setMonthIndex(prev => prev - 1);
     };
 
     const handleRightArrow = () => {
+        setDirection(1);
         setMonthIndex(prev => prev + 1);
     };
 
@@ -81,23 +91,34 @@ function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
     return (
         <div style={styles.page}>
             <div style={styles.swirlContainer}>
-                <Swirl onClick={monthSum} />
+                <Swirl onClick={monthSum} aria-label="View monthly summary" />
             </div>
-            <div style={styles.calendarContainer}>
-                <Calendar
-                    year={currentYear}
-                    month={currentMonth}
-                    onSelectDay={handleSelectDay}
-                    openSummary={monthSum}
-                />
-            </div>
+            <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                    key={monthIndex}
+                    style={styles.calendarContainer}
+                    custom={direction}
+                    variants={calendarVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.2, ease: [0.25, 1, 0.5, 1] }}
+                >
+                    <Calendar
+                        year={currentYear}
+                        month={currentMonth}
+                        onSelectDay={handleSelectDay}
+                        openSummary={monthSum}
+                    />
+                </motion.div>
+            </AnimatePresence>
 
             <div style={styles.arrowContainer}>
-                <Left onClick={handleLeftArrow} />
-                <Right onClick={handleRightArrow} />
+                <Left onClick={handleLeftArrow} aria-label="Previous month" />
+                <Right onClick={handleRightArrow} aria-label="Next month" />
             </div>
 
-            {showSummary && <Summary summary={summaryData} onClose={() => setShowSummary(false)} />}
+            <Summary show={showSummary} summary={summaryData} onClose={() => setShowSummary(false)} />
         </div>
     );
 }
@@ -110,6 +131,10 @@ const styles = {
         width: "100vw",
         height: "100vh",
         backgroundColor: "black",
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
     },
     arrowContainer: {
         position: "absolute",
@@ -119,12 +144,8 @@ const styles = {
         bottom: "6%",
     },
     calendarContainer: {
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: "70%",
-        height: "85%",
+        width: "70vw",
+        height: "85vh",
     },
     swirlContainer: {
         position: "absolute",
