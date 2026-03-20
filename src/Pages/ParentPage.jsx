@@ -1,6 +1,14 @@
 import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import CalendarPage from "./CalendarPage";
 import JournalPage from "./JournalPage";
+
+const pageVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit:    { opacity: 0 },
+};
+const pageTransition = { duration: 0.18, ease: "easeInOut" };
 
 function ParentPage() {
     const [selectedDate, setSelectedDate] = useState({
@@ -27,24 +35,42 @@ function ParentPage() {
     };
 
     return (
-        <>
+        <AnimatePresence mode="wait">
             {view === "calendar" && (
-                <CalendarPage
-                    onSelectDate={handleSelectDate}
-                    monthIndex={monthIndex}
-                    setMonthIndex={setMonthIndex}
-                />
+                <motion.div
+                    key="calendar"
+                    variants={pageVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={pageTransition}
+                >
+                    <CalendarPage
+                        onSelectDate={handleSelectDate}
+                        monthIndex={monthIndex}
+                        setMonthIndex={setMonthIndex}
+                    />
+                </motion.div>
             )}
 
             {view === "journal" && (
-                <JournalPage
-                    year={selectedDate.year}
-                    month={selectedDate.month}
-                    day={selectedDate.day}
-                    onBack={handleBackToCalendar}
-                />
+                <motion.div
+                    key="journal"
+                    variants={pageVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={pageTransition}
+                >
+                    <JournalPage
+                        year={selectedDate.year}
+                        month={selectedDate.month}
+                        day={selectedDate.day}
+                        onBack={handleBackToCalendar}
+                    />
+                </motion.div>
             )}
-        </>
+        </AnimatePresence>
     );
 }
 

@@ -67,7 +67,14 @@ function Block({ day, onClick, fill = false, circle = false }) {
             onMouseLeave={() => setHovered(false)}
             onFocus={() => setHovered(true)}
             onBlur={() => setHovered(false)}
-            tabIndex={0}
+            tabIndex={day ? 0 : -1}
+            aria-label={day ? `Day ${day}` : undefined}
+            onKeyDown={(e) => {
+                if (day && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    onClick();
+                }
+            }}
         >
             {day && <Number day={day} />}
             {circle && <div style={fillStyle}></div>}

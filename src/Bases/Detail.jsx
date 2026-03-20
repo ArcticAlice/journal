@@ -1,11 +1,13 @@
 import X from "../Assets/X";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { capitalizeWords } from "../utils/dataFunctions";
 
 function Detail({ show, info, onClose, onSave }) {
     const [task, setTask] = useState("");
     const [tag, setTag] = useState("");
     const [description, setDescription] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (!show) return;
@@ -13,13 +15,15 @@ function Detail({ show, info, onClose, onSave }) {
         setTask(info?.taskName || "");
         setTag(info?.taskTag || "");
         setDescription(info?.description || "");
+        setError("");
     }, [show, info]);
 
     const handleSave = () => {
         if (task.trim() === "") {
-            alert("Task name cannot be empty!");
+            setError("Task name cannot be empty.");
             return;
         }
+        setError("");
 
         onSave({
             taskName: capitalizeWords(task),
@@ -30,63 +34,95 @@ function Detail({ show, info, onClose, onSave }) {
         onClose();
     };
 
-    if (!show) return null;
-
     return (
-        <div style={styles.popUp}>
-            {/* Header */}
-            <div style={styles.top}>
-                <div style={styles.closeWrap}>
-                    <X onClick={onClose}/>
-                </div>
-                <h2 style={styles.headerTitle}>Task Details</h2>
-            </div>
+        <AnimatePresence>
+            {show && (
+                <motion.div
+                    style={styles.layer}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                >
+                    <div style={styles.backdrop} onClick={onClose} aria-hidden="true" />
+                    <motion.div
+                        style={styles.popUp}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Task details"
+                        initial={{ scale: 0.96, y: 12 }}
+                        animate={{ scale: 1, y: 0, transition: { duration: 0.22, ease: [0.25, 1, 0.5, 1], delay: 0.04 } }}
+                        exit={{ scale: 0.96, transition: { duration: 0.12 } }}
+                    >
+                        {/* Header */}
+                        <div style={styles.top}>
+                            <div style={styles.closeWrap}>
+                                <X onClick={onClose} color="white" aria-label="Close" />
+                            </div>
+                            <h2 style={styles.headerTitle}>Details</h2>
+                        </div>
 
-            {/* Middle */}
-            <div style={styles.middle}>
-                <textarea
-                    style={styles.taskName}
-                    placeholder="Add task..."
-                    value={task}
-                    onChange={(e) => setTask(e.target.value)}
-                />
+                        {/* Middle */}
+                        <div style={styles.middle}>
+                            <textarea
+                                style={styles.taskName}
+                                placeholder="Task name"
+                                value={task}
+                                onChange={(e) => { setTask(e.target.value); if (error) setError(""); }}
+                                autoFocus
+                            />
 
-                <textarea
-                    style={styles.descriptionInput}
-                    placeholder="Add description..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-            </div>
+                            <textarea
+                                style={styles.descriptionInput}
+                                placeholder="Description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </div>
 
-            {/* Footer */}
-            <div style={styles.bottom}>
-                <textarea
-                    style={styles.tag}
-                    placeholder="Tag!"
-                    value={tag}
-                    onChange={(e) => setTag(e.target.value)}
-                />
-                <button style={styles.saveButton} onClick={handleSave}>
-                    Save
-                </button>
-            </div>
-        </div>
+                        {/* Footer */}
+                        <div style={styles.bottom}>
+                            <textarea
+                                style={styles.tag}
+                                placeholder="Tag"
+                                value={tag}
+                                onChange={(e) => setTag(e.target.value)}
+                            />
+                            {error && <p style={styles.error}>{error}</p>}
+                            <button style={styles.saveButton} onClick={handleSave}>
+                                Save
+                            </button>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 
 export default Detail;
 
 const styles = {
-    popUp: {
+    layer: {
+        position: "fixed",
+        inset: 0,
+        zIndex: 99,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    backdrop: {
         position: "absolute",
-        width: "700px",
-        height: "600px",
+        inset: 0,
+        background: "rgba(0, 0, 0, 0.7)",
+    },
+
+    popUp: {
+        position: "relative",
+        width: "min(700px, 90vw)",
+        height: "min(600px, 90vh)",
         backgroundColor: "black",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 100,
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
@@ -197,5 +233,15 @@ const styles = {
         cursor: "pointer",
         position: "absolute",
         right: "3%",
+    },
+
+    error: {
+        color: "#750D37",
+        fontSize: "11px",
+        margin: 0,
+        position: "absolute",
+        left: "50%",
+        transform: "translateX(-50%)",
+        whiteSpace: "nowrap",
     },
 };

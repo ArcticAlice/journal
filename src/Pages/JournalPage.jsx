@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { AnimatePresence } from "motion/react";
 import PopUp from "../Bases/PopUp";
 import Template from "../Bases/Template";
 import Plus from "../Assets/Plus";
@@ -87,23 +88,25 @@ function JournalPage({ year, month, day, onBack }) {
 
     return (
         <div style={styles.page}>
-            <X width="40px" height="40px" color="#750D37" onClick={onBack} />
+            <X width="40px" height="40px" color="#750D37" onClick={onBack} aria-label="Back to calendar" />
 
             <div style={styles.date}>{new Date(year, month, day).toDateString()}</div>
 
             <div style={styles.add}>
-                <Plus width="55px" height="55px" color="#00B4D8" onClick={() => changePop(true)} />
+                <Plus width="55px" height="55px" color="#00B4D8" onClick={() => changePop(true)} aria-label="Add task" />
             </div>
 
             <div style={styles.container}>
-                {entryList.map((entry) => (
-                    <Template
-                        key={entry.id}
-                        entry={entry.taskName}
-                        onDelete={() => handleDelete(entry.id)}
-                        onEdit={() => handleEdit(entry.id)}
-                    />
-                ))}
+                <AnimatePresence>
+                    {entryList.map((entry) => (
+                        <Template
+                            key={entry.id}
+                            entry={entry.taskName}
+                            onDelete={() => handleDelete(entry.id)}
+                            onEdit={() => handleEdit(entry.id)}
+                        />
+                    ))}
+                </AnimatePresence>
             </div>
 
             <PopUp

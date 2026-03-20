@@ -1,23 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import X from "../Assets/X";
 import {capitalizeWords} from "../utils/dataFunctions";
 
 function PopUp({ show, onClose, onSave }) {
     const [task, setTask] = useState("");
     const [tag, setTag] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (show) {
             setTask("");
             setTag("");
+            setError("");
         }
     }, [show]);
 
     const handleSave = () => {
         if (task.trim() === "") {
-            alert("Task name cannot be empty!");
+            setError("Task name cannot be empty.");
             return;
         }
+        setError("");
 
         onSave({
             taskName: capitalizeWords(task),
@@ -29,29 +33,50 @@ function PopUp({ show, onClose, onSave }) {
         onClose();
     };
 
-    if (!show) return null;
-
     return (
-        <div style={styles.popUp}>
-            <div style={styles.xBox}>
-                <X onClick={onClose} color="#750D37" />
-            </div>
-            <textarea
-                style={styles.textArea}
-                placeholder="Enter Task!"
-                value={task}
-                onChange={(e) => setTask(e.target.value)}
-            />
-            <textarea
-                style={styles.tagArea}
-                placeholder="Tag!"
-                value={tag}
-                onChange={(e) => setTag(e.target.value)}
-            />
-            <button style={styles.saveButton} onClick={handleSave}>
-                Save
-            </button>
-        </div>
+        <AnimatePresence>
+            {show && (
+                <motion.div
+                    style={styles.layer}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                >
+                    <div style={styles.backdrop} onClick={onClose} aria-hidden="true" />
+                    <motion.div
+                        style={styles.popUp}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Add task"
+                        initial={{ scale: 0.96, y: 12 }}
+                        animate={{ scale: 1, y: 0, transition: { duration: 0.22, ease: [0.25, 1, 0.5, 1], delay: 0.04 } }}
+                        exit={{ scale: 0.96, transition: { duration: 0.12 } }}
+                    >
+                        <div style={styles.xBox}>
+                            <X onClick={onClose} color="#750D37" aria-label="Close" />
+                        </div>
+                        <textarea
+                            style={styles.textArea}
+                            placeholder="Task name"
+                            value={task}
+                            onChange={(e) => { setTask(e.target.value); if (error) setError(""); }}
+                            autoFocus
+                        />
+                        {error && <p style={styles.error}>{error}</p>}
+                        <textarea
+                            style={styles.tagArea}
+                            placeholder="Tag"
+                            value={tag}
+                            onChange={(e) => setTag(e.target.value)}
+                        />
+                        <button style={styles.saveButton} onClick={handleSave}>
+                            Save
+                        </button>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 
@@ -59,17 +84,28 @@ export default PopUp;
 
 
 const styles = {
-    
+
+    layer: {
+        position: "fixed",
+        inset: 0,
+        zIndex: 99,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    backdrop: {
+        position: "absolute",
+        inset: 0,
+        background: "rgba(0, 0, 0, 0.7)",
+    },
+
     popUp: {
         position: "relative",
-        width: "500px",
+        width: "min(500px, 90vw)",
         height: "250px",
         backgroundColor: "black",
         padding: "20px",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 100,
         overflow: "auto",
         borderRadius: "15px",
         display: "flex",
@@ -82,7 +118,7 @@ const styles = {
         position: "absolute",
         bottom: "5%",
         right: "2%",
-        backgroundColor: "#750D37",
+        backgroundColor: "#00B4D8",
         color: "white",
         border: "none",
         padding: "8px 12px",
@@ -95,6 +131,15 @@ const styles = {
         top: "5%",
         right: "3%",
         cursor: "pointer"
+    },
+
+    error: {
+        position: "absolute",
+        bottom: "18%",
+        left: "5%",
+        color: "#750D37",
+        fontSize: "11px",
+        margin: 0,
     },
 
     textArea: {
