@@ -1,5 +1,5 @@
 import X from "../Assets/X";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Summary({ show, onClose, summary }) {
     

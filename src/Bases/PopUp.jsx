@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import X from "../Assets/X";
 import {capitalizeWords} from "../utils/dataFunctions";
 

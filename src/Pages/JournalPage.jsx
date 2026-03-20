@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence } from "framer-motion";
 import PopUp from "../Bases/PopUp";
 import Template from "../Bases/Template";
 import Plus from "../Assets/Plus";
