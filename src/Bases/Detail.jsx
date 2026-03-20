@@ -1,6 +1,6 @@
 import X from "../Assets/X";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { capitalizeWords } from "../utils/dataFunctions";
 
 function Detail({ show, info, onClose, onSave }) {
