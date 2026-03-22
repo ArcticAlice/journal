@@ -1,28 +1,32 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Calendar from "../Bases/Calendar";
 import Right from "../Assets/Right";
 import Left from "../Assets/Left";
 import Summary from "../Bases/Summary";
 import Swirl from "../Assets/Swirl";
+import Moon from "../Assets/Moon";
+import MoonPopup from "../Bases/MoonPopUp";
 import { getData } from "../utils/dataFunctions";
+
 
 const calendarVariants = {
     enter: (dir) => ({ opacity: 0, x: dir * 22 }),
     center: { opacity: 1, x: 0 },
-    exit:   (dir) => ({ opacity: 0, x: dir * -22 }),
+    exit: (dir) => ({ opacity: 0, x: dir * -22 }),
 };
 
 function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
     const { currentYear, currentMonth } = useMemo(() => {
         const year = 1970 + Math.floor(monthIndex / 12);
-        const month = ((monthIndex % 12) + 12) % 12; // keep in 0..11 even if monthIndex goes negative
+        const month = ((monthIndex % 12) + 12) % 12;
         return { currentYear: year, currentMonth: month };
     }, [monthIndex]);
 
     const [showSummary, setShowSummary] = useState(false);
     const [summaryData, setSummaryData] = useState([]);
     const [direction, setDirection] = useState(0);
+    const [showMoonPopup, setShowMoonPopup] = useState(false);
 
     const handleLeftArrow = () => {
         setDirection(-1);
@@ -93,6 +97,12 @@ function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
             <div style={styles.swirlContainer}>
                 <Swirl onClick={monthSum} aria-label="View monthly summary" />
             </div>
+
+            {/* Moon now opens the import/export popup */}
+            <div style={styles.moonContainer}>
+                <Moon onClick={() => setShowMoonPopup(true)} aria-label="Import / Export" />
+            </div>
+
             <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                     key={monthIndex}
@@ -119,12 +129,15 @@ function CalendarPage({ onSelectDate, monthIndex, setMonthIndex }) {
             </div>
 
             <Summary show={showSummary} summary={summaryData} onClose={() => setShowSummary(false)} />
+
+            <MoonPopup show={showMoonPopup} onClose={() => setShowMoonPopup(false)} />
         </div>
     );
 }
 
 export default CalendarPage;
 
+// ─── CalendarPage styles ─────────────────────────────────────────────────────
 
 const styles = {
     page: {
@@ -154,5 +167,13 @@ const styles = {
         justifyContent: "center",
         left: "2.5%",
         top: "2.5%",
-    }
-}
+    },
+    moonContainer: {
+        position: "absolute",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        left: "2.5%",
+        bottom: "2.5%",
+    },
+};

@@ -62,3 +62,18 @@ export function editData(dateKey, id, newEntry) {
 export function capitalizeWords(str) {
   return str.replace(/\b\p{L}/gu, c => c.toUpperCase());
 }
+
+export function exportSave() {
+    const data = localStorage.getItem("entries");
+    return data;
+}
+
+export function importSave(saveString) {
+    try {
+        JSON.parse(saveString); // validate format
+        localStorage.setItem("entries", saveString);
+        console.log("Save imported!");
+    } catch (e) {
+        console.error("Invalid save data");
+    }
+}
